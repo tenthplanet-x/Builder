@@ -48,6 +48,7 @@ impl From<RequestId> for Uuid {
     }
 }
 
+
 impl std::fmt::Display for RequestId {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
@@ -68,6 +69,13 @@ impl FromRequest for RequestId {
     }
 }
 
+
+impl From<RequestId> for Uuid1 {
+    fn from(r: RequestId) -> Self {
+        r.0
+    }
+}
+
 #[derive(Debug)]
 /// Error returned by the [`RequestId`] extractor when it fails to retrieve
 /// the current request id from request-local storage.
@@ -85,6 +93,14 @@ pub struct RequestIdExtractionError {
     // manually in their own code.
     _priv: (),
 }
+
+
+impl RequestIdx{
+    pub(crate) fn generate() -> Self {
+        Self(Uuid::new_v4())
+    }
+}
+
 
 impl ResponseError for RequestIdExtractionError {}
 
